@@ -79,12 +79,13 @@ class EscapeGame {
                 ]
             },
             "corridor_ext": {
-                "title": "Couloir vers l'Extérieur et les Escaliers",
+                "title": "Couloir de transition",
                 "image": "Corridor-direction_exterior_and_alumni_and_classroom.jpeg",
-                "description": "Au fond à gauche se trouvent les portes vers l'extérieur, et à droite les escaliers centraux.",
+                "description": "Un couloir calme de NEOMA. La sortie extérieure est à gauche, et les escaliers centraux en face.",
                 "hotspots": [
                     { "type": "move", "label": "Vers la sortie extérieure", "icon": "🚪", "x": 15, "y": 50, "target": "exterior_door" },
-                    { "type": "move", "label": "Vers les escaliers centraux", "icon": "🔀", "x": 58, "y": 55, "target": "stairs_central" },
+                    { "type": "move", "label": "Vers les escaliers", "icon": "🔀", "x": 58, "y": 55, "target": "stairs_central" },
+                    { "type": "inspect", "label": "Lire le panneau d'affichage", "icon": "📌", "x": 82, "y": 38, "puzzleId": "anecdote_neoma" },
                     { "type": "move", "label": "Retour au carrefour", "icon": "⬇️", "x": 50, "y": 86, "target": "corridor_choice" }
                 ]
             },
@@ -303,6 +304,16 @@ class EscapeGame {
                 <blockquote class="alex-quote">
                     « Prends les chiffres de l'affiche <strong>98 %</strong>, fais 9 - 8 = <strong>1</strong>, ajoute <strong>9</strong>, et termine par l'année <strong>26</strong>. Code : <strong>1926</strong>. »
                 </blockquote>
+            `;
+        }
+        else if (puzzleId === "anecdote_neoma") {
+            title.textContent = "📌 Panneau d'affichage — Le Saviez-vous ?";
+            body.innerHTML = `
+                <p>Un vieux flyer punaisé sur le panneau raconte une anecdote sur NEOMA :</p>
+                <blockquote class="alex-quote">
+                    « Le sais-tu ? Le campus de NEOMA organise chaque année des défis d'intégration légendaires où les étudiants doivent résoudre des énigmes grandeur nature à travers tous les bâtiments. Certains disent que les meilleurs détectives finissent par intégrer une société secrète étudiante... »
+                </blockquote>
+                <p style="text-align:center; color: #00A88F; margin-top:10px;">(anecdote validée 🎯 Aucune incidence sur l'enquête, juste pour le fun !)</p>
             `;
         }
         else if (puzzleId === "boite_retour") {
