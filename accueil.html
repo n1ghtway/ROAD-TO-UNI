@@ -1,70 +1,82 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEOMA Escape Game — Le Dossier Alex Morgan</title>
+    <title>NEOMA Escape Game — The Alex Morgan File</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Barre supérieure (ATH / HUD) -->
+    <!-- Top HUD -->
     <header id="hud">
         <div class="hud-left">
-            <span class="badge-live">● ENQUÊTE EN COURS</span>
-            <h1 id="scene-title">Chargement...</h1>
+            <span class="badge-live">● INVESTIGATION LIVE</span>
+            <h1 id="scene-title">Loading...</h1>
         </div>
         <div class="hud-center">
             <span id="timer">35:00</span>
         </div>
         <div class="hud-right">
-            <button id="btn-inventory" class="hud-btn">📁 Preuves (<span id="evidence-count">0</span>/5)</button>
+            <button id="btn-inventory" class="hud-btn">📁 Evidence (<span id="evidence-count">0</span>/5)</button>
+            <button id="btn-badges" class="hud-btn">🏆 Badges (<span id="badge-count">0</span>)</button>
             <button id="btn-briefing" class="hud-btn">📜 Briefing</button>
         </div>
     </header>
 
-    <!-- Zone principale de jeu (Point & Click) -->
+    <!-- Main Viewport -->
     <main id="game-viewport">
         <div id="scene-container">
-            <img id="scene-image" src="" alt="Vue du campus">
+            <img id="scene-image" src="" alt="Campus view">
             <div id="hotspots-layer"></div>
         </div>
 
-        <!-- Boîte de dialogue / Narration -->
+        <!-- Dialogue Box -->
         <div id="dialogue-box">
             <p id="scene-description"></p>
         </div>
     </main>
 
-    <!-- Modale : Briefing d'Alex Morgan -->
+    <!-- Briefing Modal -->
     <div id="modal-briefing" class="modal">
         <div class="modal-content">
             <span class="close-btn" data-close="modal-briefing">&times;</span>
-            <h2>⚠️ MESSAGE INTERCEPTÉ — ALEX MORGAN</h2>
+            <h2>⚠️ INTERCEPTED MESSAGE — ALEX MORGAN</h2>
             <blockquote class="alex-quote">
                 « If you're reading this, they've already erased my identity. There are five pieces of evidence hidden around the campus. Find them before the system resets. And remember: not everyone in your team is who they claim to be. »
             </blockquote>
-            <p><strong>Objectif :</strong> Explore le campus, résous les 5 épreuves et identifie qui a effacé le dossier d'Alex, quand et pourquoi.</p>
-            <button class="action-btn" data-close="modal-briefing">Commencer l'exploration</button>
+            <p><strong>Objective:</strong> Explore the campus, solve the 5 trials, and identify who erased Alex's file, when, and why.</p>
+            <button class="action-btn" data-close="modal-briefing">Start Exploration</button>
         </div>
     </div>
 
-    <!-- Modale : Inventaire des preuves -->
+    <!-- Evidence Modal -->
     <div id="modal-inventory" class="modal">
         <div class="modal-content">
             <span class="close-btn" data-close="modal-inventory">&times;</span>
-            <h2>📁 DOSSIER D'ENQUÊTE & OBJETS</h2>
+            <h2>📁 INVESTIGATION EVIDENCE</h2>
             <div id="inventory-list">
-                <p class="empty-msg">Aucune preuve récoltée pour le moment.</p>
+                <p class="empty-msg">No evidence collected yet.</p>
             </div>
         </div>
     </div>
 
-    <!-- Modale : Énigmes et Épreuves -->
+    <!-- Badges Modal -->
+    <div id="modal-badges" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" data-close="modal-badges">&times;</span>
+            <h2>🏆 UNLOCKED BADGES</h2>
+            <div id="badges-list">
+                <p class="empty-msg">No badges unlocked yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Puzzles Modal -->
     <div id="modal-puzzle" class="modal">
         <div class="modal-content modal-large">
             <span class="close-btn" data-close="modal-puzzle">&times;</span>
-            <h2 id="puzzle-title">Énigme</h2>
+            <h2 id="puzzle-title">Puzzle</h2>
             <div id="puzzle-body"></div>
             <p id="puzzle-feedback" class="feedback-msg"></p>
         </div>
