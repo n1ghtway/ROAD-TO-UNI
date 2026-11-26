@@ -178,7 +178,6 @@ class EscapeGame {
         this.currentSceneId = "entree";
         this.inventory = [];
         
-        // Charger les badges depuis le stockage local du navigateur (localStorage) s'ils existent
         const savedBadges = localStorage.getItem("neoma_escape_badges");
         this.badges = savedBadges ? JSON.parse(savedBadges) : [];
 
@@ -193,7 +192,6 @@ class EscapeGame {
 
     init() {
         this.setupUI();
-        // Mettre à jour l'affichage du compteur de badges dès le chargement
         document.getElementById('badge-count').textContent = this.badges.length;
         this.startTimer();
         this.loadScene(this.currentSceneId);
@@ -213,6 +211,7 @@ class EscapeGame {
         });
 
         document.getElementById('btn-badges').addEventListener('click', () => {
+            if (this.isGameOver) return;
             this.renderBadges();
             document.getElementById('modal-badges').classList.add('active');
         });
@@ -245,7 +244,6 @@ class EscapeGame {
 
     triggerGameOver() {
         this.isGameOver = true;
-        // Ajout du badge d'échec humiliant (sauvegardé automatiquement)
         this.addBadge("you are so BAAAAD i will never hire you as a detective");
 
         const viewport = document.getElementById('game-viewport');
@@ -363,7 +361,6 @@ class EscapeGame {
         const feedback = document.getElementById('puzzle-feedback');
         feedback.textContent = "";
 
-        // --- GESTION DES TASSES DE CAFÉ (Total : 5) ---
         if (puzzleId.startsWith("tasse_cafe_")) {
             this.foundCoffeeCups.add(puzzleId);
             title.textContent = "☕ Coffee Cup Found! (" + this.foundCoffeeCups.size + "/5)";
@@ -493,7 +490,12 @@ class EscapeGame {
         }
         else if (puzzleId === "borne_tactile") {
             title.textContent = "🖥️ Touchscreen Kiosk";
-            body.innerHTML = `<p>The screen offers a choice of cute cat wallpapers. Quite relaxing.</p>`;
+            body.innerHTML = `
+                <p>The screen offers a choice of cute cat wallpapers. In the corner, a glitching system notification flashes:</p>
+                <blockquote class="alex-quote">
+                    « [AUDIO LOG #03 — CAFETERIA]: ...static... <strong>the truth is hidden in the schedule</strong> ...static... »
+                </blockquote>
+            `;
         }
         else if (puzzleId === "salle_cours") {
             title.textContent = "📝 Classroom Whiteboard";
@@ -673,7 +675,6 @@ class EscapeGame {
     addBadge(badgeText) {
         if (!this.badges.includes(badgeText)) {
             this.badges.push(badgeText);
-            // Sauvegarder immédiatement dans le localStorage du navigateur
             localStorage.setItem("neoma_escape_badges", JSON.stringify(this.badges));
             document.getElementById('badge-count').textContent = this.badges.length;
         }
