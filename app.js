@@ -33,7 +33,7 @@ class EscapeGame {
             "entree_downstairs": {
                 "title": "Rez-de-chaussée — Espace Accueil",
                 "image": "entry_downstrairs.jpeg",
-                "description": "En bas des escaliers, face aux portes de la bibliothèque.",
+                "description": "En bas des escaliers, face aux portes vitrées de la bibliothèque.",
                 "hotspots": [
                     { "type": "move", "label": "Entrer dans la Bibliothèque", "icon": "🚪", "x": 88, "y": 50, "target": "library_left" },
                     { "type": "inspect", "label": "Boîte de retour de prêts", "icon": "📦", "x": 76, "y": 55, "puzzleId": "boite_retour" },
@@ -62,85 +62,94 @@ class EscapeGame {
             "corridor_choice": {
                 "title": "Carrefour du Couloir Principal",
                 "image": "corridor-choice_cafeteria_or_direction_stairs_alumni-classroom.jpeg",
-                "description": "Un carrefour avec les portraits des anciens élèves (Alumni).",
+                "description": "Le mur des Alumni. À gauche se trouve la cafétéria, tout droit la suite du bâtiment.",
                 "hotspots": [
-                    { "type": "move", "label": "Vers la Cafétéria", "icon": "⬅️", "x": 20, "y": 45, "target": "cafeteria" },
-                    { "type": "move", "label": "Vers le Pôle IT & Trophées", "icon": "➡️", "x": 85, "y": 50, "target": "downstairs_it" },
-                    { "type": "move", "label": "Retour à l'entrée", "icon": "⬇️", "x": 50, "y": 85, "target": "entree" }
+                    { "type": "move", "label": "Vers la Cafétéria", "icon": "⬅️", "x": 18, "y": 48, "target": "cafeteria" },
+                    { "type": "move", "label": "Continuer dans le couloir", "icon": "⬆️", "x": 81, "y": 50, "target": "corridor_ext" },
+                    { "type": "move", "label": "Retour à l'entrée", "icon": "⬇️", "x": 50, "y": 86, "target": "entree" }
                 ]
             },
             "cafeteria": {
                 "title": "La Cafétéria / Neo Café",
                 "image": "Cafeteria.jpeg",
-                "description": "Espace de détente et de restauration.",
+                "description": "Espace de détente et de restauration. Un message codé est affiché sur le panneau.",
                 "hotspots": [
-                    { "type": "puzzle", "label": "Épreuve 3 : La Transmission", "icon": "📡", "x": 50, "y": 45, "puzzleId": "epreuve_3" },
-                    { "type": "move", "label": "Retour au carrefour", "icon": "➡️", "x": 90, "y": 50, "target": "corridor_choice" }
-                ]
-            },
-            "downstairs_it": {
-                "title": "Carrefour Trophées & Pôle IT",
-                "image": "downstrairs-choice_alumni-choice_IT.jpeg",
-                "description": "Vitrines de trophées et entrée du local informatique.",
-                "hotspots": [
-                    { "type": "move", "label": "Entrer dans la Salle IT", "icon": "💻", "x": 42, "y": 45, "target": "it_room" },
-                    { "type": "move", "label": "Vers la sortie extérieure", "icon": "🚪", "x": 15, "y": 45, "target": "corridor_ext" },
-                    { "type": "move", "label": "Retour au carrefour", "icon": "⬅️", "x": 90, "y": 50, "target": "corridor_choice" }
-                ]
-            },
-            "it_room": {
-                "title": "Salle Informatique / Technique",
-                "image": "IT-room.jpeg",
-                "description": "Écrans de contrôle et serveurs du campus.",
-                "hotspots": [
-                    { "type": "puzzle", "label": "Épreuve 4 : L'Emploi du temps", "icon": "⏱️", "x": 48, "y": 42, "puzzleId": "epreuve_4" },
-                    { "type": "move", "label": "Sortir de la salle", "icon": "🚪", "x": 85, "y": 50, "target": "downstairs_it" }
+                    { "type": "puzzle", "label": "Épreuve 3 : La Transmission", "icon": "📡", "x": 54, "y": 40, "puzzleId": "epreuve_3" },
+                    { "type": "move", "label": "Retour au carrefour", "icon": "⬇️", "x": 50, "y": 86, "target": "corridor_choice" }
                 ]
             },
             "corridor_ext": {
-                "title": "Couloir vers l'Extérieur & Salles",
+                "title": "Couloir vers l'Extérieur et les Escaliers",
                 "image": "Corridor-direction_exterior_and_alumni_and_classroom.jpeg",
-                "description": "Couloir de transition menant aux salles de cours et terrasses.",
+                "description": "Au fond à gauche se trouvent les portes vers l'extérieur, et à droite les escaliers centraux.",
                 "hotspots": [
-                    { "type": "move", "label": "Entrer en Salle de Classe", "icon": "🏫", "x": 25, "y": 45, "target": "classroom" },
-                    { "type": "move", "label": "Sortir à l'Extérieur", "icon": "🌳", "x": 10, "y": 50, "target": "exterior_door" },
-                    { "type": "move", "label": "Retour Pôle IT", "icon": "⬅️", "x": 90, "y": 50, "target": "downstairs_it" }
+                    { "type": "move", "label": "Vers la sortie extérieure", "icon": "🚪", "x": 15, "y": 50, "target": "exterior_door" },
+                    { "type": "move", "label": "Vers les escaliers centraux", "icon": "🔀", "x": 58, "y": 55, "target": "stairs_central" },
+                    { "type": "move", "label": "Retour au carrefour", "icon": "⬇️", "x": 50, "y": 86, "target": "corridor_choice" }
+                ]
+            },
+            "stairs_central": {
+                "title": "Cage d'Escalier Centrale",
+                "image": "dowstrairs_alumni-upstairs_classroom.jpeg",
+                "description": "Tu peux monter vers les salles de classe ou descendre vers le pôle Alumni et informatique.",
+                "hotspots": [
+                    { "type": "move", "label": "Monter vers les salles de classe", "icon": "⬆️", "x": 49, "y": 46, "target": "classroom" },
+                    { "type": "move", "label": "Descendre vers le Pôle IT & Alumni", "icon": "⬇️", "x": 35, "y": 62, "target": "downstairs_it" },
+                    { "type": "move", "label": "Retour au couloir", "icon": "⬅️", "x": 15, "y": 80, "target": "corridor_ext" }
                 ]
             },
             "classroom": {
-                "title": "Salle de Classe Standard",
+                "title": "Salle de Classe (Étage)",
                 "image": "classroom.jpeg",
-                "description": "Salle de cours de NEOMA.",
+                "description": "Une salle de cours vide. Des notes sont restées au tableau.",
                 "hotspots": [
-                    { "type": "inspect", "label": "Inspecter le tableau", "icon": "📝", "x": 15, "y": 50, "puzzleId": "salle_cours" },
-                    { "type": "move", "label": "Sortir dans le couloir", "icon": "🚪", "x": 85, "y": 50, "target": "corridor_ext" }
+                    { "type": "inspect", "label": "Inspecter le tableau", "icon": "📝", "x": 10, "y": 48, "puzzleId": "salle_cours" },
+                    { "type": "move", "label": "Redescendre aux escaliers", "icon": "⬇️", "x": 50, "y": 86, "target": "stairs_central" }
+                ]
+            },
+            "downstairs_it": {
+                "title": "Pôle Alumni & Informatique",
+                "image": "downstrairs-choice_alumni-choice_IT.jpeg",
+                "description": "Les vitrines de trophées. Le couloir sur la gauche mène directement au service informatique.",
+                "hotspots": [
+                    { "type": "move", "label": "Aller vers la Salle IT (Gauche)", "icon": "⬅️", "x": 22, "y": 48, "target": "it_room" },
+                    { "type": "move", "label": "Remonter aux escaliers", "icon": "⬆️", "x": 50, "y": 86, "target": "stairs_central" }
+                ]
+            },
+            "it_room": {
+                "title": "Salle Informatique / Service Technique",
+                "image": "IT-room.jpeg",
+                "description": "Les écrans de contrôle et les serveurs du campus. C'est ici que les dossiers sont gérés.",
+                "hotspots": [
+                    { "type": "puzzle", "label": "Épreuve 4 : L'Emploi du temps", "icon": "⏱️", "x": 45, "y": 42, "puzzleId": "epreuve_4" },
+                    { "type": "move", "label": "Sortir vers le couloir", "icon": "⬇️", "x": 50, "y": 86, "target": "downstairs_it" }
                 ]
             },
             "exterior_door": {
-                "title": "Porte de Sortie Extérieure",
+                "title": "Hall de Sortie Extérieure",
                 "image": "exterior-door.jpeg",
-                "description": "Portes menant à la cour extérieure.",
+                "description": "Les grandes portes vitrées donnent directement sur la terrasse extérieure.",
                 "hotspots": [
-                    { "type": "move", "label": "Aller dans la Cour Basse", "icon": "⬇️", "x": 50, "y": 55, "target": "exterior_downstairs" },
-                    { "type": "move", "label": "Aller sur la Terrasse Haute", "icon": "⬆️", "x": 80, "y": 50, "target": "exterior_upstairs" },
-                    { "type": "move", "label": "Retour à l'intérieur", "icon": "🚪", "x": 15, "y": 50, "target": "corridor_ext" }
-                ]
-            },
-            "exterior_downstairs": {
-                "title": "Cour Extérieure & Coursive",
-                "image": "Exterior-downstairs.jpeg",
-                "description": "Espace extérieur, tables de pique-nique et table de Teqball.",
-                "hotspots": [
-                    { "type": "puzzle", "label": "Épreuve 5 : Accusation Finale", "icon": "⚖️", "x": 50, "y": 60, "puzzleId": "epreuve_5" },
-                    { "type": "move", "label": "Retour à l'intérieur", "icon": "🚪", "x": 85, "y": 50, "target": "exterior_door" }
+                    { "type": "move", "label": "Sortir sur la Terrasse", "icon": "☀️", "x": 50, "y": 50, "target": "exterior_upstairs" },
+                    { "type": "move", "label": "Retour dans le couloir", "icon": "⬇️", "x": 50, "y": 86, "target": "corridor_ext" }
                 ]
             },
             "exterior_upstairs": {
-                "title": "Terrasse Haute",
+                "title": "Terrasse Extérieure Haute",
                 "image": "exterior-upstairs.jpeg",
-                "description": "Vue panoramique sur les bâtiments de NEOMA.",
+                "description": "Tu es sur la terrasse supérieure. Sur la droite, un escalier descend vers la cour basse.",
                 "hotspots": [
-                    { "type": "move", "label": "Redescendre", "icon": "⬇️", "x": 50, "y": 70, "target": "exterior_door" }
+                    { "type": "move", "label": "Descendre les escaliers", "icon": "↘️", "x": 83, "y": 62, "target": "exterior_downstairs" },
+                    { "type": "move", "label": "Rentrer dans le bâtiment", "icon": "🚪", "x": 28, "y": 52, "target": "exterior_door" }
+                ]
+            },
+            "exterior_downstairs": {
+                "title": "Cour Extérieure Basse",
+                "image": "Exterior-downstairs.jpeg",
+                "description": "La cour basse avec les tables et la table de Teqball. Si tu as toutes les preuves, tu peux conclure l'enquête ici.",
+                "hotspots": [
+                    { "type": "puzzle", "label": "Épreuve 5 : Accusation Finale", "icon": "⚖️", "x": 42, "y": 62, "puzzleId": "epreuve_5" },
+                    { "type": "move", "label": "Remonter sur la terrasse", "icon": "↗️", "x": 85, "y": 55, "target": "exterior_upstairs" }
                 ]
             }
         };
@@ -306,7 +315,7 @@ class EscapeGame {
         }
         else if (puzzleId === "salle_cours") {
             title.textContent = "📝 Tableau de classe";
-            body.innerHTML = `<p>Des calculs de cryptographie effacés à moitié : <em>R=01, E=26</em>.</p>`;
+            body.innerHTML = `<p>Des calculs de cryptographie effacés à moitié : <em>Dernière modification système : 14:12</em>.</p>`;
         }
         else if (puzzleId === "epreuve_1") {
             title.textContent = "📂 ÉPREUVE 1 — THE IDENTITY GLITCH";
@@ -394,7 +403,7 @@ class EscapeGame {
         else if (puzzleId === "epreuve_3") {
             title.textContent = "📡 ÉPREUVE 3 — THE BROKEN TRANSMISSION";
             body.innerHTML = `
-                <p>Message codé intercepté à la cafétéria. Entre la phrase clé révélée par la communication :</p>
+                <p>Message codé intercepté à la cafétéria. Entre la phrase clé révélée par la communication (Indice : <em>The truth is hidden in the schedule</em>) :</p>
                 <div class="code-input-group">
                     <input type="text" id="trans-input" class="code-input" style="letter-spacing: 2px; font-size: 1rem;" placeholder="Phrase secrète...">
                     <button id="btn-validate-ep3" class="hud-btn">Valider</button>
@@ -416,7 +425,7 @@ class EscapeGame {
         else if (puzzleId === "epreuve_4") {
             title.textContent = "⏱️ ÉPREUVE 4 — THE IMPOSSIBLE TIMETABLE";
             body.innerHTML = `
-                <p>Quel est le faux cours ou l'heure exacte de modification du dossier d'Alex ? (Format HH:MM)</p>
+                <p>Quel est l'horaire exact de modification du dossier d'Alex sur les serveurs ? (Format HH:MM, indice dans la salle de classe)</p>
                 <div class="code-input-group">
                     <input type="text" id="time-input" class="code-input" maxlength="5" placeholder="14:12">
                     <button id="btn-validate-ep4" class="hud-btn">Valider</button>
@@ -427,10 +436,10 @@ class EscapeGame {
                 if (document.getElementById('time-input').value.trim() === "14:12") {
                     feedback.style.color = "#00A88F";
                     feedback.innerHTML = "✅ Preuve #4 validée : Heure de suppression confirmée (14:12).";
-                    this.addEvidence("Preuve #4 : Heure de suppression du dossier.");
+                    this.addEvidence("Preuve #4 : Heure de suppression du dossier (14:12).");
                 } else {
                     feedback.style.color = "#ff5e5e";
-                    feedback.textContent = "❌ Heure incorrecte (Cherche dans les logs de l'amphi / IT).";
+                    feedback.textContent = "❌ Heure incorrecte.";
                 }
             });
             return;
@@ -461,7 +470,7 @@ class EscapeGame {
                     this.addEvidence("Preuve #5 : Dossier Final Résolu + Badge Campus Investigator.");
                 } else {
                     feedback.style.color = "#ff5e5e";
-                    feedback.textContent = "❌ Ce n'est pas le bon suspect. Relis le twist final de l'histoire !";
+                    feedback.textContent = "❌ Ce n'est pas le bon suspect.";
                 }
             });
             return;
