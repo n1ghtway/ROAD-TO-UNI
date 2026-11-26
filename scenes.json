@@ -1,0 +1,81 @@
+{
+  "startScene": "entree",
+  "scenes": {
+    "entree": {
+      "title": "Hall d'entrée — La Passerelle",
+      "image": "Entry-front_door.png",
+      "description": "Tu viens d'entrer sur le campus de NEOMA. Le message d'Alex résonne encore : cinq preuves sont cachées ici. Par où commences-tu ?",
+      "hotspots": [
+        {
+          "type": "move",
+          "label": "Vers le couloir central",
+          "icon": "⬆️",
+          "x": 50,
+          "y": 48,
+          "target": "couloir_central"
+        },
+        {
+          "type": "move",
+          "label": "Descendre les escaliers",
+          "icon": "↙️",
+          "x": 18,
+          "y": 78,
+          "target": "escaliers"
+        },
+        {
+          "type": "move",
+          "label": "Vers l'amphithéâtre",
+          "icon": "➡️",
+          "x": 85,
+          "y": 65,
+          "target": "amphi"
+        }
+      ]
+    },
+    "couloir_central": {
+      "title": "Couloir Central (En construction)",
+      "image": "Entry-front_door.png",
+      "description": "Zone en attente de ta prochaine photo ! Clique sur retour pour revenir sur la passerelle.",
+      "hotspots": [
+        {
+          "type": "move",
+          "label": "Retour à l'entrée",
+          "icon": "⬇️",
+          "x": 50,
+          "y": 85,
+          "target": "entree"
+        }
+      ]
+    },
+    "escaliers": {
+      "title": "Escaliers (En construction)",
+      "image": "Entry-front_door.png",
+      "description": "Zone en attente de ta prochaine photo !",
+      "hotspots": [
+        {
+          "type": "move",
+          "label": "Remonter à l'entrée",
+          "icon": "↗️",
+          "x": 50,
+          "y": 85,
+          "target": "entree"
+        }
+      ]
+    },
+    "amphi": {
+      "title": "Amphithéâtre (En construction)",
+      "image": "Entry-front_door.png",
+      "description": "Zone en attente de ta prochaine photo !",
+      "hotspots": [
+        {
+          "type": "move",
+          "label": "Retour à l'entrée",
+          "icon": "⬅️",
+          "x": 50,
+          "y": 85,
+          "target": "entree"
+        }
+      ]
+    }
+  }
+}

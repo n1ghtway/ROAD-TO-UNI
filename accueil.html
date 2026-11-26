@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEOMA Escape Game — Le Dossier Alex Morgan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Barre supérieure (ATH / HUD) -->
+    <header id="hud">
+        <div class="hud-left">
+            <span class="badge-live">● ENQUÊTE EN COURS</span>
+            <h1 id="scene-title">Chargement...</h1>
+        </div>
+        <div class="hud-center">
+            <span id="timer">35:00</span>
+        </div>
+        <div class="hud-right">
+            <button id="btn-inventory" class="hud-btn">📁 Preuves (<span id="evidence-count">0</span>/5)</button>
+            <button id="btn-briefing" class="hud-btn">📜 Briefing</button>
+        </div>
+    </header>
+
+    <!-- Zone principale de jeu (Vue 360 / Point & Click) -->
+    <main id="game-viewport">
+        <div id="scene-container">
+            <img id="scene-image" src="" alt="Vue du campus">
+            <!-- Les zones cliquables (flèches de déplacement et indices) seront injectées ici -->
+            <div id="hotspots-layer"></div>
+        </div>
+
+        <!-- Boîte de dialogue / Narration en bas de l'écran -->
+        <div id="dialogue-box">
+            <p id="scene-description"></p>
+        </div>
+    </main>
+
+    <!-- Modale : Briefing d'Alex Morgan -->
+    <div id="modal-briefing" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" data-close="modal-briefing">&times;</span>
+            <h2>⚠️ MESSAGE INTERCEPTÉ — ALEX MORGAN</h2>
+            <blockquote class="alex-quote">
+                « If you're reading this, they've already erased my identity. There are five pieces of evidence hidden around the campus. Find them before the system resets. And remember: not everyone in your team is who they claim to be. »
+            </blockquote>
+            <p><strong>Objectif :</strong> Explore le campus, résous les 5 épreuves et identifie qui a effacé le dossier d'Alex, quand et pourquoi.</p>
+            <button class="action-btn" data-close="modal-briefing">Commencer l'exploration</button>
+        </div>
+    </div>
+
+    <!-- Modale : Inventaire des preuves -->
+    <div id="modal-inventory" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" data-close="modal-inventory">&times;</span>
+            <h2>📁 DOSSIER D'ENQUÊTE</h2>
+            <div id="inventory-list">
+                <p class="empty-msg">Aucune preuve récoltée pour le moment.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
