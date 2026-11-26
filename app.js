@@ -17,7 +17,8 @@ class EscapeGame {
                 "description": "Devant les doubles portes de l'amphi. Un digicode protège l'entrée.",
                 "hotspots": [
                     { "type": "inspect", "label": "Examiner le chevalet", "icon": "🔍", "x": 46, "y": 62, "puzzleId": "indice_chevalet" },
-                    { "type": "locked_move", "label": "Entrer dans l'Amphithéâtre", "icon": "🔒", "x": 45, "y": 45, "target": "amphitheatre", "lockId": "porte_amphi" },
+                    { "type": "locked_move", "label": "Porte Gauche", "icon": "🔒", "x": 17, "y": 44, "target": "amphitheatre", "lockId": "porte_amphi" },
+                    { "type": "locked_move", "label": "Porte Droite", "icon": "🔒", "x": 72, "y": 45, "target": "amphitheatre", "lockId": "porte_amphi" },
                     { "type": "move", "label": "Retour à l'entrée", "icon": "⬇️", "x": 50, "y": 86, "target": "entree" }
                 ]
             },
@@ -81,10 +82,10 @@ class EscapeGame {
             "corridor_ext": {
                 "title": "Couloir de transition",
                 "image": "Corridor-direction_exterior_and_alumni_and_classroom.jpeg",
-                "description": "Un couloir calme de NEOMA. La sortie extérieure est à gauche, et les escaliers centraux en face.",
+                "description": "Un couloir calme de NEOMA. La sortie extérieure est à gauche, et les escaliers centraux au fond.",
                 "hotspots": [
-                    { "type": "move", "label": "Vers la sortie extérieure", "icon": "🚪", "x": 15, "y": 50, "target": "exterior_door" },
-                    { "type": "move", "label": "Vers les escaliers", "icon": "🔀", "x": 58, "y": 55, "target": "stairs_central" },
+                    { "type": "move", "label": "Vers la sortie extérieure", "icon": "🚪", "x": 10, "y": 50, "target": "exterior_door" },
+                    { "type": "move", "label": "Vers les escaliers", "icon": "🔀", "x": 22, "y": 50, "target": "stairs_central" },
                     { "type": "inspect", "label": "Lire le panneau d'affichage", "icon": "📌", "x": 82, "y": 38, "puzzleId": "anecdote_neoma" },
                     { "type": "move", "label": "Retour au carrefour", "icon": "⬇️", "x": 50, "y": 86, "target": "corridor_choice" }
                 ]
