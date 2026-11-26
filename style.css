@@ -124,6 +124,7 @@ body {
     font-size: 0.9rem;
     box-shadow: 0 4px 15px rgba(0,0,0,0.7);
     transition: transform 0.2s, background 0.2s;
+    z-Index: 10;
 }
 
 .hotspot.type-inspect { border-color: var(--neoma-green); }
