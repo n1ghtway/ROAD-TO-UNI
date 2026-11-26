@@ -1,7 +1,77 @@
 class EscapeGame {
     constructor() {
-        this.scenes = {};
-        this.currentSceneId = null;
+        // Toutes les scènes et les déplacements sont directement ici (plus besoin de scenes.json)
+        this.scenes = {
+            "entree": {
+                "title": "Hall d'entrée — La Passerelle",
+                "image": "Entry-front_door.png",
+                "description": "Tu viens d'entrer sur le campus de NEOMA. Le message d'Alex résonne encore : cinq preuves sont cachées ici. Par où commences-tu ?",
+                "hotspots": [
+                    { "type": "move", "label": "Vers le couloir central", "icon": "⬆️", "x": 50, "y": 48, "target": "couloir_central" },
+                    { "type": "move", "label": "Descendre les escaliers", "icon": "↙️", "x": 18, "y": 78, "target": "entree_downstairs" },
+                    { "type": "move", "label": "Vers l'amphithéâtre", "icon": "➡️", "x": 85, "y": 65, "target": "amphi_hall" }
+                ]
+            },
+            "entree_downstairs": {
+                "title": "Rez-de-chaussée — Espace Accueil & Détente",
+                "image": "entry_downstrairs.jpeg",
+                "description": "Te voilà en bas des escaliers. Sur ta droite, les portes vitrées mènent à la grande bibliothèque du campus.",
+                "hotspots": [
+                    { "type": "move", "label": "Entrer dans la Bibliothèque", "icon": "🚪", "x": 88, "y": 50, "target": "library_left" },
+                    { "type": "inspect", "label": "Inspecter les boîtes de retour", "icon": "📦", "x": 76, "y": 55, "puzzleId": "boite_retour" },
+                    { "type": "move", "label": "Remonter à la passerelle", "icon": "↗️", "x": 15, "y": 25, "target": "entree" }
+                ]
+            },
+            "library_left": {
+                "title": "Bibliothèque — Espace Travail & Accueil",
+                "image": "Library-left_side-desks.png",
+                "description": "Un vaste espace rempli de tables de travail et de bornes de service.",
+                "hotspots": [
+                    { "type": "move", "label": "Aller vers les rayonnages (Droite)", "icon": "➡️", "x": 85, "y": 50, "target": "library_right" },
+                    { "type": "inspect", "label": "Consulter la borne tactile", "icon": "🖥️", "x": 90, "y": 78, "puzzleId": "borne_tactile" },
+                    { "type": "move", "label": "Sortir de la bibliothèque", "icon": "⬅️", "x": 12, "y": 50, "target": "entree_downstairs" }
+                ]
+            },
+            "library_right": {
+                "title": "Bibliothèque — Allée des Rayonnages",
+                "image": "Library-right_side-bookshelves.jpeg",
+                "description": "Des rangées de livres. Un indice est dissimulé entre les étagères.",
+                "hotspots": [
+                    { "type": "puzzle", "label": "Épreuve 2 : Le Plan Invisible", "icon": "🗺️", "x": 55, "y": 42, "puzzleId": "epreuve_2" },
+                    { "type": "move", "label": "Retour vers les tables (Gauche)", "icon": "⬅️", "x": 15, "y": 50, "target": "library_left" }
+                ]
+            },
+            "amphi_hall": {
+                "title": "Foyer de l'Amphithéâtre",
+                "image": "Amphitheatre_outside.jpeg",
+                "description": "Tu arrives devant les doubles portes de l'amphithéâtre. Un digicode bloque l'accès.",
+                "hotspots": [
+                    { "type": "inspect", "label": "Examiner le chevalet", "icon": "🔍", "x": 46, "y": 62, "puzzleId": "indice_chevalet" },
+                    { "type": "locked_move", "label": "Portes Amphithéâtre (Gauche)", "icon": "🔒", "x": 17, "y": 44, "target": "amphitheatre", "lockId": "porte_amphi" },
+                    { "type": "locked_move", "label": "Portes Amphithéâtre (Droite)", "icon": "🔒", "x": 72, "y": 45, "target": "amphitheatre", "lockId": "porte_amphi" },
+                    { "type": "move", "label": "Retour vers l'entrée", "icon": "⬇️", "x": 50, "y": 86, "target": "entree" }
+                ]
+            },
+            "amphitheatre": {
+                "title": "Grand Amphithéâtre",
+                "image": "Amphitheatre.jpeg",
+                "description": "L'amphithéâtre est désert, des dossiers sont sur le pupitre.",
+                "hotspots": [
+                    { "type": "puzzle", "label": "Épreuve 1 : Inspecter le pupitre", "icon": "📂", "x": 86, "y": 62, "puzzleId": "epreuve_1" },
+                    { "type": "move", "label": "Sortir vers le foyer", "icon": "⬅️", "x": 29, "y": 24, "target": "amphi_hall" }
+                ]
+            },
+            "couloir_central": {
+                "title": "Couloir Central (En attente)",
+                "image": "Entry-front_door.png",
+                "description": "Zone en attente de ta prochaine photo !",
+                "hotspots": [
+                    { "type": "move", "label": "Retour à l'entrée", "icon": "⬇️", "x": 50, "y": 85, "target": "entree" }
+                ]
+            }
+        };
+
+        this.currentSceneId = "entree";
         this.inventory = [];
         this.unlockedDoors = {};
         this.timeRemaining = 35 * 60;
@@ -10,22 +80,12 @@ class EscapeGame {
         this.init();
     }
 
-    async init() {
-        try {
-            const response = await fetch('scenes.json');
-            const data = await response.json();
-            this.scenes = data.scenes;
+    init() {
+        this.setupUI();
+        this.startTimer();
+        this.loadScene(this.currentSceneId);
 
-            this.setupUI();
-            this.startTimer();
-            this.loadScene(data.startScene);
-
-            document.getElementById('modal-briefing').classList.add('active');
-        } catch (error) {
-            console.error("Erreur :", error);
-            document.getElementById('scene-description').textContent = 
-                "Erreur : impossible de charger scenes.json. Utilise un serveur local.";
-        }
+        document.getElementById('modal-briefing').classList.add('active');
     }
 
     setupUI() {
@@ -168,13 +228,13 @@ class EscapeGame {
         else if (puzzleId === "boite_retour") {
             title.textContent = "📦 Boîte de retour des prêts";
             body.innerHTML = `
-                <p>À l'intérieur de la boîte de dépôt, un rapport oublié mentionne l'emprunt d'un livre de cryptographie par Alex Morgan, avec un signet marquant la page 42.</p>
+                <p>À l'intérieur de la boîte de dépôt, un rapport oublié mentionne l'emprunt d'un livre par Alex Morgan.</p>
             `;
         }
         else if (puzzleId === "borne_tactile") {
             title.textContent = "🖥️ Borne tactile de la Bibliothèque";
             body.innerHTML = `
-                <p>L'écran tactile liste les horaires d'ouverture des salles de réunion secrètes du campus. Un message clignote : <em>« La vérité suit l'ordre des cours de l'emploi du temps. »</em></p>
+                <p>L'écran tactile liste les horaires. <em>« La vérité suit l'ordre des cours de l'emploi du temps. »</em></p>
             `;
         }
         else if (puzzleId === "epreuve_1") {
@@ -236,23 +296,22 @@ class EscapeGame {
         else if (puzzleId === "epreuve_2") {
             title.textContent = "🗺️ ÉPREUVE 2 — THE INVISIBLE CAMPUS";
             body.innerHTML = `
-                <p>Entre les étagères de livres, un plan simplifié du campus est affiché. Pour révéler les 3 lieux secrets d'Alex, tu dois superposer la <strong>Carte Transparente</strong> (obtenue à l'épreuve 1).</p>
-                <p>Sélectionne l'ordre des 3 lieux à visiter selon les horaires de l'emploi du temps :</p>
+                <p>Entre les étagères de livres, un plan simplifié du campus. Sélectionne l'ordre des 3 lieux à visiter selon les horaires :</p>
                 <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
                     <select id="seq-1" class="code-input" style="font-size: 1rem; letter-spacing: normal;">
-                        <option value="">1er lieu révélé par le calque...</option>
+                        <option value="">1er lieu...</option>
                         <option value="biblio">La Bibliothèque (Zone des livres)</option>
                         <option value="amphi">L'Amphithéâtre</option>
                         <option value="cafet">La Cafétéria / Foyer</option>
                     </select>
                     <select id="seq-2" class="code-input" style="font-size: 1rem; letter-spacing: normal;">
-                        <option value="">2e lieu révélé par le calque...</option>
+                        <option value="">2e lieu...</option>
                         <option value="biblio">La Bibliothèque (Zone des livres)</option>
                         <option value="amphi">L'Amphithéâtre</option>
                         <option value="cafet">La Cafétéria / Foyer</option>
                     </select>
                     <select id="seq-3" class="code-input" style="font-size: 1rem; letter-spacing: normal;">
-                        <option value="">3e lieu révélé par le calque...</option>
+                        <option value="">3e lieu...</option>
                         <option value="biblio">La Bibliothèque (Zone des livres)</option>
                         <option value="amphi">L'Amphithéâtre</option>
                         <option value="cafet">La Cafétéria / Foyer</option>
@@ -270,11 +329,11 @@ class EscapeGame {
 
                 if (s1 === "amphi" && s2 === "biblio" && s3 === "cafet") {
                     feedback.style.color = "#00A88F";
-                    feedback.innerHTML = "✅ Excellent ! Grâce au calque et aux horaires, tu as découvert les 3 fragments de message cachés.<br><strong>Tu récupères la Preuve #2 : Fragment décodé de l'Invisible Campus !</strong>";
+                    feedback.innerHTML = "✅ Excellent !<br><strong>Tu récupères la Preuve #2 : Fragments de message !</strong>";
                     this.addEvidence("Preuve #2 : Fragments de message de l'Invisible Campus.");
                 } else {
                     feedback.style.color = "#ff5e5e";
-                    feedback.textContent = "❌ Mauvais ordre ou mauvais lieux. Aide-toi des horaires des dossiers ! (Indice : Amphi -> Bibliothèque -> Cafet).";
+                    feedback.textContent = "❌ Mauvais ordre. Indice : Amphi -> Bibliothèque -> Cafet.";
                 }
             });
             return;
