@@ -3,7 +3,7 @@ class EscapeGame {
         this.scenes = {};
         this.currentSceneId = null;
         this.inventory = [];
-        this.unlockedDoors = {}; // Stocke les portes déverrouillées
+        this.unlockedDoors = {};
         this.timeRemaining = 35 * 60;
         this.timerInterval = null;
 
@@ -86,7 +86,6 @@ class EscapeGame {
             btn.style.left = `${spot.x}%`;
             btn.style.top = `${spot.y}%`;
 
-            // Si la porte est déjà déverrouillée, on change l'icône
             let icon = spot.icon;
             if (spot.type === 'locked_move' && this.unlockedDoors[spot.lockId]) {
                 icon = "🚪";
@@ -114,7 +113,6 @@ class EscapeGame {
         }
     }
 
-    // --- GESTION DU DIGICODE DE L'AMPHI ---
     openLockPuzzle(lockId, targetScene) {
         const modal = document.getElementById('modal-puzzle');
         const title = document.getElementById('puzzle-title');
@@ -138,7 +136,7 @@ class EscapeGame {
             if (val === "1926") {
                 this.unlockedDoors[lockId] = true;
                 feedback.style.color = "#00A88F";
-                feedback.textContent = "✅ Code valide ! Les portes de l'amphithéâtre se déverrouillent.";
+                feedback.textContent = "✅ Code valide ! Les portes de l'amphithéâtre s'ouvrent.";
                 setTimeout(() => {
                     modal.classList.remove('active');
                     this.loadScene(targetScene);
@@ -150,7 +148,6 @@ class EscapeGame {
         });
     }
 
-    // --- GESTION DES INDICES ET DES 5 ÉPREUVES ---
     openPuzzle(puzzleId) {
         const modal = document.getElementById('modal-puzzle');
         const title = document.getElementById('puzzle-title');
@@ -161,71 +158,60 @@ class EscapeGame {
         if (puzzleId === "indice_chevalet") {
             title.textContent = "🔍 Affiche sur le chevalet";
             body.innerHTML = `
-                <p>Derrière l'affiche promotionnelle, quelqu'un a scotché un post-it avec une note manuscrite :</p>
+                <p>Derrière l'affiche promotionnelle, un post-it manuscrit :</p>
                 <blockquote class="alex-quote">
-                    « Pour entrer dans l'amphi, souviens-toi de la logique : Prends les deux chiffres de l'affiche <strong>98 %</strong> de l'entrée, divise le deuxième par le premier (8 / 9 ? Non, lis à l'envers : 9 - 8 = <strong>1</strong>), puis ajoute <strong>9</strong>, et termine par l'année actuelle (<strong>26</strong>). »<br><br>
-                    <em>Note gribouillée en bas :</em> <strong>1 - 9 - 2 - 6</strong>.
+                    « Pour entrer dans l'amphi, souviens-toi de la logique : Prends les deux chiffres de l'affiche <strong>98 %</strong> de l'entrée, fais 9 - 8 = <strong>1</strong>, ajoute <strong>9</strong>, et termine par l'année actuelle (<strong>26</strong>). »<br><br>
+                    <em>Code :</em> <strong>1 - 9 - 2 - 6</strong>.
                 </blockquote>
             `;
         }
-        else if (puzzleId === "ecran_amphi") {
-            title.textContent = "🖥️ Écran de contrôle de l'amphithéâtre";
+        else if (puzzleId === "boite_retour") {
+            title.textContent = "📦 Boîte de retour des prêts";
             body.innerHTML = `
-                <p>L'écran de projection est éteint, mais un terminal de maintenance affiche encore un journal système :</p>
-                <blockquote class="alex-quote">
-                    [SYSTEM LOG] : Dernière impression lancée depuis ce pupitre à 14h12.<br>
-                    Documents imprimés : 4 fiches étudiants (Programme PGE).<br>
-                    Statut : Un fichier contient des métadonnées corrompues.
-                </blockquote>
+                <p>À l'intérieur de la boîte de dépôt, un rapport oublié mentionne l'emprunt d'un livre de cryptographie par Alex Morgan, avec un signet marquant la page 42.</p>
+            `;
+        }
+        else if (puzzleId === "borne_tactile") {
+            title.textContent = "🖥️ Borne tactile de la Bibliothèque";
+            body.innerHTML = `
+                <p>L'écran tactile liste les horaires d'ouverture des salles de réunion secrètes du campus. Un message clignote : <em>« La vérité suit l'ordre des cours de l'emploi du temps. »</em></p>
             `;
         }
         else if (puzzleId === "epreuve_1") {
             title.textContent = "📂 ÉPREUVE 1 — THE IDENTITY GLITCH";
             body.innerHTML = `
-                <p>Tu trouves 4 dossiers d'étudiants sur le pupitre. L'un d'eux a été falsifié à la hâte. Repère les anomalies (horaire impossible, date de badge invalide, signature incohérente) et désigne le faux dossier :</p>
+                <p>Tu trouves 4 dossiers d'étudiants sur le pupitre. Désigne le faux dossier :</p>
                 <div class="files-grid">
                     <div class="student-card">
                         <h3>Dossier #1 — Chloé Bernard</h3>
                         <ul>
-                            <li><strong>ID Badge :</strong> NEO-2026-441 (Valide jusqu'au 30/09/2027)</li>
-                            <li><strong>Mardi 10h00 :</strong> Corporate Finance (Salle B204)</li>
-                            <li><strong>Mardi 14h00 :</strong> Marketing Strategy (Amphi A)</li>
-                            <li><strong>Signature :</strong> <em>C. Bernard</em></li>
+                            <li>ID : NEO-2026-441</li>
+                            <li>Mardi 10h00 : Corporate Finance</li>
                         </ul>
-                        <button class="suspect-btn" data-suspect="chloe">Dénoncer ce dossier</button>
+                        <button class="suspect-btn" data-suspect="chloe">Dénoncer</button>
                     </div>
-
                     <div class="student-card">
                         <h3>Dossier #2 — Lucas Vance</h3>
                         <ul>
-                            <li><strong>ID Badge :</strong> NEO-2026-892 (Valide jusqu'au 31/02/2026)</li>
-                            <li><strong>Jeudi 09h00 :</strong> Data Analytics (Salle C102 & Salle A04)</li>
-                            <li><strong>Jeudi 14h00 :</strong> Business Law (Amphi B)</li>
-                            <li><strong>Signature :</strong> <em>A. Morgan</em> (raturé)</li>
+                            <li>ID : NEO-2026-892 (Valide au 31/02/2026)</li>
+                            <li>Jeudi 09h00 : Conflit de salle</li>
                         </ul>
-                        <button class="suspect-btn" data-suspect="lucas">Dénoncer ce dossier</button>
+                        <button class="suspect-btn" data-suspect="lucas">Dénoncer</button>
                     </div>
-
                     <div class="student-card">
                         <h3>Dossier #3 — Inès El Amrani</h3>
                         <ul>
-                            <li><strong>ID Badge :</strong> NEO-2026-119 (Valide jusqu'au 30/09/2027)</li>
-                            <li><strong>Mercredi 11h00 :</strong> Supply Chain (Salle D301)</li>
-                            <li><strong>Mercredi 15h30 :</strong> Leadership (Salle B105)</li>
-                            <li><strong>Signature :</strong> <em>Inès E.A.</em></li>
+                            <li>ID : NEO-2026-119</li>
+                            <li>Mercredi 11h00 : Supply Chain</li>
                         </ul>
-                        <button class="suspect-btn" data-suspect="ines">Dénoncer ce dossier</button>
+                        <button class="suspect-btn" data-suspect="ines">Dénoncer</button>
                     </div>
-
                     <div class="student-card">
                         <h3>Dossier #4 — Alex Morgan</h3>
                         <ul>
-                            <li><strong>ID Badge :</strong> NEO-2026-001 (Statut : SUPPRIMÉ)</li>
-                            <li><strong>Lundi 08h30 :</strong> Cybersecurity Lab (Salle Info 2)</li>
-                            <li><strong>Vendredi 16h00 :</strong> Audit & Control (Amphi A)</li>
-                            <li><strong>Signature :</strong> <em>Alex Morgan</em></li>
+                            <li>ID : NEO-2026-001 (SUPPRIMÉ)</li>
                         </ul>
-                        <button class="suspect-btn" data-suspect="alex">Dénoncer ce dossier</button>
+                        <button class="suspect-btn" data-suspect="alex">Dénoncer</button>
                     </div>
                 </div>
             `;
@@ -237,13 +223,59 @@ class EscapeGame {
                     const choice = e.target.getAttribute('data-suspect');
                     if (choice === "lucas") {
                         feedback.style.color = "#00A88F";
-                        feedback.innerHTML = "✅ BRAVO ! Le dossier de Lucas Vance est un faux (31 février n'existe pas, cours dans deux salles en même temps à 9h, et signature d'Alex raturée).<br><strong>Tu récupères la Preuve #1 et une Carte Transparente de décodage !</strong>";
-                        this.addEvidence("Preuve #1 : Faux dossier de Lucas Vance + Carte Transparente (révèle des symboles cachés sur le plan du campus).");
+                        feedback.innerHTML = "✅ BRAVO ! Faux dossier identifié.<br><strong>Tu récupères la Preuve #1 et la Carte Transparente !</strong>";
+                        this.addEvidence("Preuve #1 : Faux dossier de Lucas Vance + Carte Transparente.");
                     } else {
                         feedback.style.color = "#ff5e5e";
-                        feedback.textContent = "❌ Ce dossier semble tout à fait légitime. Vérifie bien les dates, les salles et les signatures !";
+                        feedback.textContent = "❌ Ce dossier est valide.";
                     }
                 });
+            });
+            return;
+        }
+        else if (puzzleId === "epreuve_2") {
+            title.textContent = "🗺️ ÉPREUVE 2 — THE INVISIBLE CAMPUS";
+            body.innerHTML = `
+                <p>Entre les étagères de livres, un plan simplifié du campus est affiché. Pour révéler les 3 lieux secrets d'Alex, tu dois superposer la <strong>Carte Transparente</strong> (obtenue à l'épreuve 1).</p>
+                <p>Sélectionne l'ordre des 3 lieux à visiter selon les horaires de l'emploi du temps :</p>
+                <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
+                    <select id="seq-1" class="code-input" style="font-size: 1rem; letter-spacing: normal;">
+                        <option value="">1er lieu révélé par le calque...</option>
+                        <option value="biblio">La Bibliothèque (Zone des livres)</option>
+                        <option value="amphi">L'Amphithéâtre</option>
+                        <option value="cafet">La Cafétéria / Foyer</option>
+                    </select>
+                    <select id="seq-2" class="code-input" style="font-size: 1rem; letter-spacing: normal;">
+                        <option value="">2e lieu révélé par le calque...</option>
+                        <option value="biblio">La Bibliothèque (Zone des livres)</option>
+                        <option value="amphi">L'Amphithéâtre</option>
+                        <option value="cafet">La Cafétéria / Foyer</option>
+                    </select>
+                    <select id="seq-3" class="code-input" style="font-size: 1rem; letter-spacing: normal;">
+                        <option value="">3e lieu révélé par le calque...</option>
+                        <option value="biblio">La Bibliothèque (Zone des livres)</option>
+                        <option value="amphi">L'Amphithéâtre</option>
+                        <option value="cafet">La Cafétéria / Foyer</option>
+                    </select>
+                    <button id="btn-validate-ep2" class="action-btn">Vérifier la combinaison</button>
+                </div>
+            `;
+
+            modal.classList.add('active');
+
+            document.getElementById('btn-validate-ep2').addEventListener('click', () => {
+                const s1 = document.getElementById('seq-1').value;
+                const s2 = document.getElementById('seq-2').value;
+                const s3 = document.getElementById('seq-3').value;
+
+                if (s1 === "amphi" && s2 === "biblio" && s3 === "cafet") {
+                    feedback.style.color = "#00A88F";
+                    feedback.innerHTML = "✅ Excellent ! Grâce au calque et aux horaires, tu as découvert les 3 fragments de message cachés.<br><strong>Tu récupères la Preuve #2 : Fragment décodé de l'Invisible Campus !</strong>";
+                    this.addEvidence("Preuve #2 : Fragments de message de l'Invisible Campus.");
+                } else {
+                    feedback.style.color = "#ff5e5e";
+                    feedback.textContent = "❌ Mauvais ordre ou mauvais lieux. Aide-toi des horaires des dossiers ! (Indice : Amphi -> Bibliothèque -> Cafet).";
+                }
             });
             return;
         }
@@ -254,7 +286,6 @@ class EscapeGame {
     addEvidence(evidenceText) {
         if (!this.inventory.includes(evidenceText)) {
             this.inventory.push(evidenceText);
-            // Met à jour le compteur (on limite l'affichage à 5 preuves max)
             const count = Math.min(this.inventory.length, 5);
             document.getElementById('evidence-count').textContent = count;
         }
