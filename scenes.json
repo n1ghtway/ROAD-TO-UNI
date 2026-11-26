@@ -20,7 +20,7 @@
           "icon": "↙️",
           "x": 18,
           "y": 78,
-          "target": "escaliers"
+          "target": "entree_downstairs"
         },
         {
           "type": "move",
@@ -32,10 +32,95 @@
         }
       ]
     },
+    "entree_downstairs": {
+      "title": "Rez-de-chaussée — Espace Accueil & Détente",
+      "image": "entry_downstrairs.jpeg",
+      "description": "Te voilà en bas des escaliers. Sur ta droite, les portes vitrées mènent à la grande bibliothèque du campus. Des chevalets d'exposition sont plantés devant.",
+      "hotspots": [
+        {
+          "type": "move",
+          "label": "Entrer dans la Bibliothèque",
+          "icon": "🚪",
+          "x": 88,
+          "y": 50,
+          "target": "library_left"
+        },
+        {
+          "type": "inspect",
+          "label": "Inspecter les boîtes de retour",
+          "icon": "📦",
+          "x": 76,
+          "y": 55,
+          "puzzleId": "boite_retour"
+        },
+        {
+          "type": "move",
+          "label": "Remonter à la passerelle",
+          "icon": "↗️",
+          "x": 15,
+          "y": 25,
+          "target": "entree"
+        }
+      ]
+    },
+    "library_left": {
+      "title": "Bibliothèque — Espace Travail & Accueil",
+      "image": "Library-left_side-desks.png",
+      "description": "Un vaste espace rempli de tables de travail et de bornes de service. On aperçoit les rayonnages de livres plus loin.",
+      "hotspots": [
+        {
+          "type": "move",
+          "label": "Aller vers les rayonnages (Droite)",
+          "icon": "➡️",
+          "x": 85,
+          "y": 50,
+          "target": "library_right"
+        },
+        {
+          "type": "inspect",
+          "label": "Consulter la borne tactile",
+          "icon": "🖥️",
+          "x": 90,
+          "y": 78,
+          "puzzleId": "borne_tactile"
+        },
+        {
+          "type": "move",
+          "label": "Sortir de la bibliothèque",
+          "icon": "⬅️",
+          "x": 12,
+          "y": 50,
+          "target": "entree_downstairs"
+        }
+      ]
+    },
+    "library_right": {
+      "title": "Bibliothèque — Allée des Rayonnages",
+      "image": "Library-right_side-bookshelves.jpeg",
+      "description": "Des rangées interminables de livres et de manuels de management. Un indice est dissimulé entre les étagères de finance.",
+      "hotspots": [
+        {
+          "type": "puzzle",
+          "label": "Épreuve 2 : Le Plan Invisible",
+          "icon": "🗺️",
+          "x": 55,
+          "y": 42,
+          "puzzleId": "epreuve_2"
+        },
+        {
+          "type": "move",
+          "label": "Retour vers les tables (Gauche)",
+          "icon": "⬅️",
+          "x": 15,
+          "y": 50,
+          "target": "library_left"
+        }
+      ]
+    },
     "amphi_hall": {
       "title": "Foyer de l'Amphithéâtre",
       "image": "Amphitheatre_outside.jpeg",
-      "description": "Tu arrives devant les doubles portes de l'amphithéâtre. L'accès semble contrôlé par un digicode. Un chevalet avec des affiches trône au milieu du hall.",
+      "description": "Tu arrives devant les doubles portes de l'amphithéâtre...",
       "hotspots": [
         {
           "type": "inspect",
@@ -76,7 +161,7 @@
     "amphitheatre": {
       "title": "Grand Amphithéâtre",
       "image": "Amphitheatre.jpeg",
-      "description": "L'amphithéâtre est désert, mais des dossiers d'étudiants ont été oubliés sur le pupitre de conférence en bas de l'estrade.",
+      "description": "L'amphithéâtre est désert, des dossiers sont sur le pupitre.",
       "hotspots": [
         {
           "type": "puzzle",
@@ -85,14 +170,6 @@
           "x": 86,
           "y": 62,
           "puzzleId": "epreuve_1"
-        },
-        {
-          "type": "inspect",
-          "label": "Observer l'écran de scène",
-          "icon": "🖥️",
-          "x": 82,
-          "y": 32,
-          "puzzleId": "ecran_amphi"
         },
         {
           "type": "move",
@@ -113,21 +190,6 @@
           "type": "move",
           "label": "Retour à l'entrée",
           "icon": "⬇️",
-          "x": 50,
-          "y": 85,
-          "target": "entree"
-        }
-      ]
-    },
-    "escaliers": {
-      "title": "Escaliers (En attente de photo)",
-      "image": "Entry-front_door.png",
-      "description": "Zone en attente de ta prochaine photo !",
-      "hotspots": [
-        {
-          "type": "move",
-          "label": "Remonter à l'entrée",
-          "icon": "↗️",
           "x": 50,
           "y": 85,
           "target": "entree"
