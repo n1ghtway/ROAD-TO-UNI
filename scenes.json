@@ -28,14 +28,86 @@
           "icon": "➡️",
           "x": 85,
           "y": 65,
-          "target": "amphi"
+          "target": "amphi_hall"
+        }
+      ]
+    },
+    "amphi_hall": {
+      "title": "Foyer de l'Amphithéâtre",
+      "image": "Amphitheatre_outside.jpeg",
+      "description": "Tu arrives devant les doubles portes de l'amphithéâtre. L'accès semble contrôlé par un digicode. Un chevalet avec des affiches trône au milieu du hall.",
+      "hotspots": [
+        {
+          "type": "inspect",
+          "label": "Examiner le chevalet",
+          "icon": "🔍",
+          "x": 46,
+          "y": 62,
+          "puzzleId": "indice_chevalet"
+        },
+        {
+          "type": "locked_move",
+          "label": "Portes Amphithéâtre (Gauche)",
+          "icon": "🔒",
+          "x": 17,
+          "y": 44,
+          "target": "amphitheatre",
+          "lockId": "porte_amphi"
+        },
+        {
+          "type": "locked_move",
+          "label": "Portes Amphithéâtre (Droite)",
+          "icon": "🔒",
+          "x": 72,
+          "y": 45,
+          "target": "amphitheatre",
+          "lockId": "porte_amphi"
+        },
+        {
+          "type": "move",
+          "label": "Retour vers l'entrée",
+          "icon": "⬇️",
+          "x": 50,
+          "y": 86,
+          "target": "entree"
+        }
+      ]
+    },
+    "amphitheatre": {
+      "title": "Grand Amphithéâtre",
+      "image": "Amphitheatre.jpeg",
+      "description": "L'amphithéâtre est désert, mais des dossiers d'étudiants ont été oubliés sur le pupitre de conférence en bas de l'estrade.",
+      "hotspots": [
+        {
+          "type": "puzzle",
+          "label": "Épreuve 1 : Inspecter le pupitre",
+          "icon": "📂",
+          "x": 86,
+          "y": 62,
+          "puzzleId": "epreuve_1"
+        },
+        {
+          "type": "inspect",
+          "label": "Observer l'écran de scène",
+          "icon": "🖥️",
+          "x": 82,
+          "y": 32,
+          "puzzleId": "ecran_amphi"
+        },
+        {
+          "type": "move",
+          "label": "Sortir vers le foyer",
+          "icon": "⬅️",
+          "x": 29,
+          "y": 24,
+          "target": "amphi_hall"
         }
       ]
     },
     "couloir_central": {
-      "title": "Couloir Central (En construction)",
+      "title": "Couloir Central (En attente de photo)",
       "image": "Entry-front_door.png",
-      "description": "Zone en attente de ta prochaine photo ! Clique sur retour pour revenir sur la passerelle.",
+      "description": "Zone en attente de ta prochaine photo !",
       "hotspots": [
         {
           "type": "move",
@@ -48,7 +120,7 @@
       ]
     },
     "escaliers": {
-      "title": "Escaliers (En construction)",
+      "title": "Escaliers (En attente de photo)",
       "image": "Entry-front_door.png",
       "description": "Zone en attente de ta prochaine photo !",
       "hotspots": [
@@ -56,21 +128,6 @@
           "type": "move",
           "label": "Remonter à l'entrée",
           "icon": "↗️",
-          "x": 50,
-          "y": 85,
-          "target": "entree"
-        }
-      ]
-    },
-    "amphi": {
-      "title": "Amphithéâtre (En construction)",
-      "image": "Entry-front_door.png",
-      "description": "Zone en attente de ta prochaine photo !",
-      "hotspots": [
-        {
-          "type": "move",
-          "label": "Retour à l'entrée",
-          "icon": "⬅️",
           "x": 50,
           "y": 85,
           "target": "entree"
