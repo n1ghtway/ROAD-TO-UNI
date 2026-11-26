@@ -1,6 +1,5 @@
 class EscapeGame {
     constructor() {
-        // Toutes les scènes et les déplacements sont directement ici (plus besoin de scenes.json)
         this.scenes = {
             "entree": {
                 "title": "Hall d'entrée — La Passerelle",
