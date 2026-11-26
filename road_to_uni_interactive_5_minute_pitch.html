@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Road to Uni — 5-Minute Interactive Pitch</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Space Grotesk & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              dark: '#0B1120',
+              card: 'rgba(17, 24, 39, 0.72)',
+              teal: '#14B8A6',
+              orange: '#F97316',
+              indigo: '#6366F1',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Base setup & custom scroll prevention */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #0B1120;
+      color: #F8FAFC;
+      user-select: none;
+    }
+
+    /* Animated Mesh Gradient Background */
+    .animated-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(circle at 15% 20%, rgba(20, 184, 166, 0.16) 0%, transparent 45%),
+                  radial-gradient(circle at 85% 80%, rgba(249, 115, 22, 0.16) 0%, transparent 45%),
+                  radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.12) 0%, transparent 60%),
+                  #0B1120;
+      animation: bgPulse 14s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgPulse {
+      0% { transform: scale(1) translate(0, 0); }
+      50% { transform: scale(1.06) translate(-1%, 1.5%); }
+      100% { transform: scale(1.02) translate(1.5%, -1%); }
+    }
+
+    /* Interactive Canvas for Floating Particles & Connections */
+    #particleCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Slide Transition Logic */
+    .slide {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(28px) scale(0.98);
+      transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                  visibility 0.6s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem 3.5rem 5rem 3.5rem;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Staggered Entrance Animations for Active Slide Elements */
+    .slide.active .anim-item {
+      animation: fadeUpItem 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .anim-item {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    .delay-1 { animation-delay: 0.1s !important; }
+    .delay-2 { animation-delay: 0.2s !important; }
+    .delay-3 { animation-delay: 0.3s !important; }
+    .delay-4 { animation-delay: 0.4s !important; }
+    .delay-5 { animation-delay: 0.5s !important; }
+
+    @keyframes fadeUpItem {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Glassmorphism Cards */
+    .glass-card {
+      background: rgba(17, 24, 39, 0.68);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.55);
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .glass-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(249, 115, 22, 0.35);
+      box-shadow: 0 24px 48px -12px rgba(249, 115, 22, 0.15);
+    }
+
+    /* Floating Badge Pulse */
+    .float-slow {
+      animation: floatY 5s ease-in-out infinite;
+    }
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* Responsive adjustments for smaller viewports */
+    @media (max-width: 768px) {
+      .slide {
+        padding: 1.25rem 1.25rem 4.75rem 1.25rem;
+        overflow-y: auto;
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated Background Layers -->
+  <div class="animated-bg"></div>
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Top Utility Bar (Subtle Pitch Timer & Fullscreen Toggle) -->
+  <header class="fixed top-4 right-6 z-30 flex items-center gap-3">
+    <!-- 5-Minute Pitch Timer Pill -->
+    <button id="timerBtn" onclick="toggleTimer()" title="Click to Start/Pause 5-Minute Pitch Timer (Double-click to reset)"
+            class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/75 border border-white/10 text-xs font-medium text-slate-300 hover:border-orange-500/50 hover:text-white backdrop-blur-md transition cursor-pointer">
+      <i id="timerIcon" class="fa-solid fa-stopwatch text-orange-400"></i>
+      <span id="timerDisplay" class="font-mono tracking-wider">05:00</span>
+    </button>
+
+    <!-- Fullscreen Toggle -->
+    <button onclick="toggleFullscreen()" title="Toggle Fullscreen (F)"
+            class="w-8 h-8 rounded-full bg-slate-900/75 border border-white/10 text-slate-300 hover:border-teal-400/50 hover:text-white backdrop-blur-md flex items-center justify-center transition cursor-pointer">
+      <i class="fa-solid fa-expand text-xs"></i>
+    </button>
+  </header>
+
+  <!-- ==================== SLIDE 1: TITLE, HOOK & TEAM MEMBERS ==================== -->
+  <section class="slide active" id="slide-1">
+    <div class="max-w-6xl mx-auto w-full my-auto">
+      <div class="anim-item inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 text-xs md:text-sm font-semibold tracking-wider uppercase mb-6 float-slow">
+        <i class="fa-solid fa-compass"></i>
+        <span>NEOMA Business School · Fall 2026</span>
+      </div>
+
+      <h1 class="anim-item delay-1 font-display text-5xl sm:text-7xl md:text-8xl font-extrabold tracking-tight text-white leading-none">
+        ROAD TO <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-teal-400">UNI</span>
+      </h1>
+
+      <p class="anim-item delay-2 text-lg sm:text-2xl text-teal-300 font-medium mt-4">
+        Gamified Campus Discovery Experience
+      </p>
+
+      <!-- Engaging Hook Callout -->
+      <div class="anim-item delay-3 mt-8 max-w-3xl glass-card rounded-2xl p-6 border-l-4 border-l-orange-500">
+        <p class="text-xs uppercase tracking-widest text-orange-400 font-bold mb-1.5">Opening Question</p>
+        <p class="text-xl sm:text-2xl md:text-3xl font-display font-semibold text-white leading-snug">
+          “Have you ever felt completely lost on a brand-new campus?”
+        </p>
+      </div>
+    </div>
+
+    <!-- Bottom Right: All Team Members -->
+    <div class="anim-item delay-4 fixed bottom-16 right-6 md:right-12 text-right z-20 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-2xl px-5 py-3.5 shadow-xl">
+      <p class="text-[11px] font-bold uppercase tracking-widest text-orange-400 mb-1">
+        <i class="fa-solid fa-users mr-1.5"></i>Project Team Members
+      </p>
+      <p class="text-sm sm:text-base font-semibold text-slate-100 leading-snug">
+        Alessandro MULAZZANI &bull; Camille PASZTOR &bull; Nicolas PENOTY
+      </p>
+      <p class="text-xs text-slate-400 mt-0.5">
+        Sara OGHBASILASIE <span class="text-slate-500">(Initial Member · W1–W3)</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 2: THE PROBLEM & CONTEXT ==================== -->
+  <section class="slide" id="slide-2">
+    <div class="max-w-6xl mx-auto w-full">
+      <div class="anim-item flex items-center gap-2 text-teal-400 text-xs sm:text-sm font-bold uppercase tracking-widest mb-2">
+        <span>01 · Context &amp; Problem</span>
+      </div>
+      <h2 class="anim-item delay-1 font-display text-3xl sm:text-5xl font-bold text-white mb-8">
+        Why First-Day Orientation Fails New Students
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card 1 -->
+        <div class="anim-item delay-2 glass-card rounded-2xl p-6 flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-orange-500/20 border border-orange-500/30 flex items-center justify-center shrink-0 text-orange-400 text-xl">
+            <i class="fa-solid fa-signs-post"></i>
+          </div>
+          <div>
+            <h3 class="font-display text-xl font-bold text-white mb-1.5">First-Day Spatial Confusion</h3>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Arriving at NEOMA is exciting yet overwhelming—students struggle to locate the <strong class="text-white">Library, Student Services, Administration</strong>, and common study zones.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="anim-item delay-2 glass-card rounded-2xl p-6 flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center shrink-0 text-teal-400 text-xl">
+            <i class="fa-solid fa-map"></i>
+          </div>
+          <div>
+            <h3 class="font-display text-xl font-bold text-white mb-1.5">Outdated &amp; Passive Methods</h3>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Traditional onboarding relies on long, <strong class="text-white">passive info lectures</strong> and static paper maps that fail to engage modern students.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="anim-item delay-3 glass-card rounded-2xl p-6 flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center shrink-0 text-indigo-400 text-xl">
+            <i class="fa-solid fa-circle-exclamation"></i>
+          </div>
+          <div>
+            <h3 class="font-display text-xl font-bold text-white mb-1.5">Missed Vital Information</h3>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Students frequently miss out on essential campus resources and academic support simply because they cannot find the right office early on.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="anim-item delay-3 glass-card rounded-2xl p-6 flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-500/30 flex items-center justify-center shrink-0 text-rose-400 text-xl">
+            <i class="fa-solid fa-user-slash"></i>
+          </div>
+          <div>
+            <h3 class="font-display text-xl font-bold text-white mb-1.5">Fragmented Integration</h3>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+              High orientation stress creates social barriers, making it harder for <strong class="text-white">first-year and international exchange students</strong> to connect.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 3: THE SOLUTION — ROAD TO UNI ==================== -->
+  <section class="slide" id="slide-3">
+    <div class="max-w-6xl mx-auto w-full">
+      <div class="anim-item flex items-center gap-2 text-orange-400 text-xs sm:text-sm font-bold uppercase tracking-widest mb-2">
+        <span>02 · Our Solution</span>
+      </div>
+      <h2 class="anim-item delay-1 font-display text-3xl sm:text-5xl font-bold text-white mb-3">
+        Road to Uni: Interactive Campus Escape Game
+      </h2>
+      <p class="anim-item delay-1 text-slate-300 text-base sm:text-lg max-w-3xl mb-7">
+        Designed for <strong class="text-teal-300">first-year undergraduate &amp; international exchange students</strong>—turning a stressful first day into a collaborative campus adventure.
+      </p>
+
+      <!-- 3 Core Pillars -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-7">
+        <div class="anim-item delay-2 glass-card rounded-2xl p-6 border-t-4 border-t-orange-500">
+          <div class="text-orange-400 text-2xl mb-3"><i class="fa-solid fa-puzzle-piece"></i></div>
+          <h3 class="font-display text-xl font-bold text-white mb-2">Location-Based Puzzles</h3>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            At each campus stop, players solve interactive riddles that require exploring real rooms and discovering practical services.
+          </p>
+        </div>
+
+        <div class="anim-item delay-3 glass-card rounded-2xl p-6 border-t-4 border-t-teal-400">
+          <div class="text-teal-400 text-2xl mb-3"><i class="fa-solid fa-people-arrows"></i></div>
+          <h3 class="font-display text-xl font-bold text-white mb-2">Social Icebreaker</h3>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Encourages newcomers to team up, talk with peers, and feel part of the NEOMA community right from day one.
+          </p>
+        </div>
+
+        <div class="anim-item delay-4 glass-card rounded-2xl p-6 border-t-4 border-t-indigo-400">
+          <div class="text-indigo-400 text-2xl mb-3"><i class="fa-solid fa-graduation-cap"></i></div>
+          <h3 class="font-display text-xl font-bold text-white mb-2">Active Learning</h3>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Replaces passive guidebooks with hands-on exploration so students remember where everything is located.
+          </p>
+        </div>
+      </div>
+
+      <!-- 5 Core Campus Locations Strip -->
+      <div class="anim-item delay-5 glass-card rounded-2xl p-5">
+        <p class="text-xs font-bold uppercase tracking-widest text-teal-400 mb-3">
+          <i class="fa-solid fa-location-dot mr-1.5"></i>5 Core Campus Escape Game Stops
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          <div class="bg-slate-800/80 border border-white/10 rounded-xl p-3 text-center">
+            <i class="fa-solid fa-book-open text-orange-400 text-lg mb-1"></i>
+            <p class="text-xs sm:text-sm font-semibold text-white">1. Library</p>
+          </div>
+          <div class="bg-slate-800/80 border border-white/10 rounded-xl p-3 text-center">
+            <i class="fa-solid fa-mug-hot text-teal-400 text-lg mb-1"></i>
+            <p class="text-xs sm:text-sm font-semibold text-white">2. Cafeteria</p>
+          </div>
+          <div class="bg-slate-800/80 border border-white/10 rounded-xl p-3 text-center">
+            <i class="fa-solid fa-users-rectangle text-indigo-400 text-lg mb-1"></i>
+            <p class="text-xs sm:text-sm font-semibold text-white">3. Student Hub</p>
+          </div>
+          <div class="bg-slate-800/80 border border-white/10 rounded-xl p-3 text-center">
+            <i class="fa-solid fa-building-columns text-amber-400 text-lg mb-1"></i>
+            <p class="text-xs sm:text-sm font-semibold text-white">4. Administration</p>
+          </div>
+          <div class="col-span-2 sm:col-span-1 bg-slate-800/80 border border-white/10 rounded-xl p-3 text-center">
+            <i class="fa-solid fa-briefcase text-emerald-400 text-lg mb-1"></i>
+            <p class="text-xs sm:text-sm font-semibold text-white">5. Career Center</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 4: VISION, SMART OBJECTIVES & SCOPE ==================== -->
+  <section class="slide" id="slide-4">
+    <div class="max-w-6xl mx-auto w-full">
+      <div class="anim-item flex items-center gap-2 text-teal-400 text-xs sm:text-sm font-bold uppercase tracking-widest mb-2">
+        <span>03 · Vision, Objectives &amp; Scope</span>
+      </div>
+      <h2 class="anim-item delay-1 font-display text-3xl sm:text-5xl font-bold text-white mb-6">
+        Clear Targets &amp; Strict Scope Boundaries
+      </h2>
+
+      <!-- Vision Banner -->
+      <div class="anim-item delay-2 glass-card rounded-2xl p-5 mb-6 border-l-4 border-l-teal-400 flex items-center gap-4">
+        <i class="fa-solid fa-bullseye text-2xl text-teal-400 shrink-0"></i>
+        <p class="text-sm sm:text-base text-slate-200">
+          <strong class="text-white">Our Vision:</strong> Make university onboarding fun, social, and stress-free from day one through interactive campus discovery.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- SMART Objectives Column -->
+        <div class="anim-item delay-3 glass-card rounded-2xl p-6">
+          <h3 class="font-display text-xl font-bold text-teal-300 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-chart-line"></i> SMART Success Targets
+          </h3>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="px-2.5 py-1 rounded-lg bg-teal-500/20 text-teal-300 font-display font-bold text-sm shrink-0">5 Zones</span>
+              <p class="text-sm sm:text-base text-slate-300">Design unique, interactive escape game challenges across <strong class="text-white">5 key campus locations</strong>.</p>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="px-2.5 py-1 rounded-lg bg-orange-500/20 text-orange-300 font-display font-bold text-sm shrink-0">&ge; 80%</span>
+              <p class="text-sm sm:text-base text-slate-300"><strong class="text-white">Task completion rate</strong> achieved during live usability tests with real students.</p>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 font-display font-bold text-sm shrink-0">&ge; 80%</span>
+              <p class="text-sm sm:text-base text-slate-300"><strong class="text-white">Student satisfaction score</strong> validating campus discovery and engagement value.</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Scope Boundaries Column -->
+        <div class="anim-item delay-4 glass-card rounded-2xl p-6">
+          <h3 class="font-display text-xl font-bold text-orange-400 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-shield-halved"></i> Scope Boundaries
+          </h3>
+          <div class="space-y-4">
+            <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25">
+              <p class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-1">
+                <i class="fa-solid fa-circle-check mr-1"></i> Included (In Scope)
+              </p>
+              <p class="text-sm text-slate-200">
+                Escape game storyline, puzzle rules, user flow, interactive UI screen wireframes, and live student usability testing.
+              </p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/25">
+              <p class="text-xs font-bold uppercase tracking-wider text-rose-400 mb-1">
+                <i class="fa-solid fa-circle-xmark mr-1"></i> Excluded (Out of Scope)
+              </p>
+              <p class="text-sm text-slate-200">
+                Native iOS/Android software coding, App Store deployment, and personal student data collection (<strong class="text-white">full GDPR compliance</strong>).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 5: RISKS & TEAM CHALLENGES ==================== -->
+  <section class="slide" id="slide-5">
+    <div class="max-w-6xl mx-auto w-full">
+      <div class="anim-item flex items-center gap-2 text-orange-400 text-xs sm:text-sm font-bold uppercase tracking-widest mb-2">
+        <span>04 · Risks &amp; Team Challenges</span>
+      </div>
+      <h2 class="anim-item delay-1 font-display text-3xl sm:text-5xl font-bold text-white mb-7">
+        How We Handled Real Project Obstacles
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Challenge 1: Team Capacity Drop -->
+        <div class="anim-item delay-2 glass-card rounded-2xl p-6 border-l-4 border-l-rose-500">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-rose-400">Issue · Week 3</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-xs font-semibold">4 &rarr; 3 Members</span>
+          </div>
+          <h3 class="font-display text-xl font-bold text-white mb-2">Team Capacity Drop</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            One member left the course in Week 3. Instead of panicking, we activated our <strong class="text-white">Team Working Agreement</strong> and immediately redistributed tasks across the 3 remaining members—keeping every deadline on track.
+          </p>
+        </div>
+
+        <!-- Challenge 2: Technical Risk -->
+        <div class="anim-item delay-2 glass-card rounded-2xl p-6 border-l-4 border-l-orange-500">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-orange-400">Technical Risk</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 text-xs font-semibold">Mitigated Early</span>
+          </div>
+          <h3 class="font-display text-xl font-bold text-white mb-2">Zero Native Coding Skills</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Building a native mobile app without programming expertise risked total failure. We pivoted early to a <strong class="text-white">high-fidelity interactive prototype</strong> to validate the experience realistically.
+          </p>
+        </div>
+
+        <!-- Challenge 3: User Testing Recruitment -->
+        <div class="anim-item delay-3 glass-card rounded-2xl p-6 border-l-4 border-l-teal-400">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Validation Risk</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-xs font-semibold">&ge; 4 Testers</span>
+          </div>
+          <h3 class="font-display text-xl font-bold text-white mb-2">Recruiting Student Testers</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Finding busy students to test our game was a key risk. We offered <strong class="text-white">snack incentives</strong> and ran trials during peak library hours, easily reaching our target sample.
+          </p>
+        </div>
+
+        <!-- Challenge 4: Institutional Alignment -->
+        <div class="anim-item delay-3 glass-card rounded-2xl p-6 border-l-4 border-l-indigo-400">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-400">Stakeholder Risk</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold">Early Buy-In</span>
+          </div>
+          <h3 class="font-display text-xl font-bold text-white mb-2">Campus Rules &amp; Approvals</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Using campus buildings and branding required institutional permission. We consulted <strong class="text-white">NEOMA Administration &amp; BDE/BDI</strong> early to guarantee safety and compliance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 6: DIAGNOSIS, KEY LESSONS & Q&A ==================== -->
+  <section class="slide" id="slide-6">
+    <div class="max-w-5xl mx-auto w-full text-center">
+      <div class="anim-item inline-flex items-center gap-2 text-orange-400 text-xs sm:text-sm font-bold uppercase tracking-widest mb-3">
+        <span>05 · Diagnosis &amp; Key Takeaway</span>
+      </div>
+
+      <!-- Diagnosis Box -->
+      <div class="anim-item delay-1 glass-card rounded-2xl p-6 sm:p-7 mb-7 text-left border-l-4 border-l-teal-400">
+        <p class="text-xs font-bold uppercase tracking-wider text-teal-400 mb-1.5">
+          <i class="fa-solid fa-stethoscope mr-1.5"></i>Project Diagnosis: What Saved Us
+        </p>
+        <p class="text-base sm:text-lg text-slate-200 leading-relaxed">
+          Sticking to an unrealistic ambition—coding a full mobile app with no programming skills—would have caused the project to fail. <strong class="text-white">Re-scoping early</strong> and reacting immediately to our <strong class="text-white">Week 3 team size drop</strong> kept the project 100% on track.
+        </p>
+      </div>
+
+      <!-- Single Most Important Lesson -->
+      <div class="anim-item delay-2 mb-8">
+        <p class="text-xs font-bold uppercase tracking-widest text-orange-400 mb-2">The Single Most Important Lesson</p>
+        <h2 class="font-display text-2xl sm:text-4xl font-bold text-white leading-snug max-w-4xl mx-auto">
+          “Project management is not about following a rigid, perfect plan—it is about <span class="text-orange-400">dynamic flexibility</span>, fixing problems fast, and always keeping <span class="text-teal-300">user needs first</span>.”
+        </h2>
+      </div>
+
+      <!-- Closing Prompt -->
+      <div class="anim-item delay-3 inline-flex flex-col items-center">
+        <div class="w-20 h-1 bg-gradient-to-r from-orange-500 to-teal-400 rounded-full mb-5"></div>
+        <p class="font-display text-2xl sm:text-3xl font-bold text-white">
+          Thank you for listening!
+        </p>
+        <p class="text-base sm:text-lg text-teal-300 font-medium mt-1">
+          Do you have any questions?
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Interactive Navigation Controls -->
+  <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-4 px-5 py-2.5 rounded-full bg-slate-900/85 border border-white/10 backdrop-blur-md shadow-2xl">
+    <button id="prevBtn" onclick="changeSlide(-1)" aria-label="Previous Slide"
+            class="w-8 h-8 rounded-full flex items-center justify-center text-slate-300 hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:pointer-events-none transition cursor-pointer">
+      <i class="fa-solid fa-chevron-left text-sm"></i>
+    </button>
+
+    <!-- Slide Dots -->
+    <div id="dotsContainer" class="flex items-center gap-2"></div>
+
+    <!-- Counter -->
+    <span id="slideCounter" class="text-xs font-mono font-semibold text-slate-400 min-w-[36px] text-center">
+      1 / 6
+    </span>
+
+    <button id="nextBtn" onclick="changeSlide(1)" aria-label="Next Slide"
+            class="w-8 h-8 rounded-full flex items-center justify-center text-slate-300 hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:pointer-events-none transition cursor-pointer">
+      <i class="fa-solid fa-chevron-right text-sm"></i>
+    </button>
+  </nav>
+
+  <script>
+    /* ==================== SLIDE NAVIGATION LOGIC ==================== */
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const slideCounter = document.getElementById('slideCounter');
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    // Create indicator dots dynamically
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('button');
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dot.className = 'h-2.5 rounded-full transition-all duration-300 cursor-pointer ' +
+                      (i === 0 ? 'w-7 bg-orange-500' : 'w-2.5 bg-slate-600 hover:bg-slate-400');
+      dot.addEventListener('click', () => goToSlide(i));
+      dotsContainer.appendChild(dot);
+    }
+
+    function updateUI() {
+      slides.forEach((slide, idx) => {
+        if (idx === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      const dots = dotsContainer.querySelectorAll('button');
+      dots.forEach((dot, idx) => {
+        if (idx === currentSlide) {
+          dot.className = 'h-2.5 w-7 rounded-full bg-orange-500 transition-all duration-300 cursor-pointer';
+        } else {
+          dot.className = 'h-2.5 w-2.5 rounded-full bg-slate-600 hover:bg-slate-400 transition-all duration-300 cursor-pointer';
+        }
+      });
+
+      slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === totalSlides - 1;
+    }
+
+    function changeSlide(direction) {
+      const nextIndex = currentSlide + direction;
+      if (nextIndex >= 0 && nextIndex < totalSlides) {
+        currentSlide = nextIndex;
+        updateUI();
+      }
+    }
+
+    function goToSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        currentSlide = index;
+        updateUI();
+      }
+    }
+
+    // Keyboard navigation (Arrow keys, Space, F for Fullscreen)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        changeSlide(1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        changeSlide(-1);
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      }
+    });
+
+    // Touch swipe support for mobile/tablets
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        changeSlide(diff > 0 ? 1 : -1);
+      }
+    }, { passive: true });
+
+    // Fullscreen helper
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    /* ==================== 5-MINUTE PITCH TIMER ==================== */
+    let timeLeft = 300; // 5 minutes in seconds
+    let timerInterval = null;
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerBtn = document.getElementById('timerBtn');
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60).toString().padStart(2, '0');
+      const s = (sec % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function toggleTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        timerBtn.classList.remove('border-orange-500', 'text-white');
+      } else {
+        timerBtn.classList.add('border-orange-500', 'text-white');
+        timerInterval = setInterval(() => {
+          if (timeLeft > 0) {
+            timeLeft--;
+            timerDisplay.textContent = formatTime(timeLeft);
+            if (timeLeft <= 30) {
+              timerDisplay.classList.add('text-rose-400', 'font-bold');
+            }
+          } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
+        }, 1000);
+      }
+    }
+
+    timerBtn.addEventListener('dblclick', () => {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timeLeft = 300;
+      timerDisplay.textContent = '05:00';
+      timerDisplay.classList.remove('text-rose-400', 'font-bold');
+      timerBtn.classList.remove('border-orange-500', 'text-white');
+    });
+
+    /* ==================== ANIMATED PARTICLE BACKGROUND ==================== */
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.45;
+        this.vy = (Math.random() - 0.5) * 0.45;
+        this.radius = Math.random() * 2.2 + 1;
+        this.color = Math.random() > 0.5 ? 'rgba(20, 184, 166, 0.45)' : 'rgba(249, 115, 22, 0.4)';
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      const count = Math.min(55, Math.floor((canvas.width * canvas.height) / 22000));
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+
+        // Draw subtle constellation lines between nearby nodes
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 130) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(148, 163, 184, ${(1 - dist / 130) * 0.14})`;
+            ctx.lineWidth = 1;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animateParticles);
+    }
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      initParticles();
+    });
+
+    window.onload = function () {
+      resizeCanvas();
+      initParticles();
+      animateParticles();
+      updateUI();
+    };
+  </script>
+</body>
+</html>
