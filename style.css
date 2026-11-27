@@ -124,7 +124,7 @@ body {
     font-size: 0.9rem;
     box-shadow: 0 4px 15px rgba(0,0,0,0.7);
     transition: transform 0.2s, background 0.2s;
-    z-index: 10;
+    z-Index: 10;
 }
 
 .hotspot.type-inspect { border-color: var(--neoma-green); }
@@ -136,7 +136,7 @@ body {
     border-color: #fff;
 }
 
-/* --- DIALOGUE BOX --- */
+/* --- BOÎTE DE DIALOGUE --- */
 #dialogue-box {
     position: absolute;
     bottom: 20px;
@@ -154,7 +154,7 @@ body {
 
 #scene-description { font-size: 0.98rem; line-height: 1.5; }
 
-/* --- MODALS --- */
+/* --- MODALES --- */
 .modal {
     display: none;
     position: fixed;
@@ -218,7 +218,7 @@ body {
 
 .action-btn:hover { opacity: 0.9; }
 
-/* --- PUZZLES & INVENTORY --- */
+/* --- ÉNIGMES & DOSSIERS --- */
 .code-input-group {
     display: flex;
     gap: 10px;
