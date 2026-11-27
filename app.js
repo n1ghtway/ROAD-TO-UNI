@@ -216,6 +216,10 @@ class EscapeGame {
             document.getElementById('modal-badges').classList.add('active');
         });
 
+        document.getElementById('close-dialogue').addEventListener('click', () => {
+            document.getElementById('dialogue-box').style.display = 'none';
+        });
+
         document.querySelectorAll('[data-close]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const modalId = e.target.getAttribute('data-close');
@@ -273,6 +277,7 @@ class EscapeGame {
         this.currentSceneId = sceneId;
         document.getElementById('scene-title').textContent = scene.title;
         document.getElementById('scene-description').textContent = scene.description;
+        document.getElementById('dialogue-box').style.display = 'block';
         
         const imgEl = document.getElementById('scene-image');
         imgEl.style.opacity = 0;
